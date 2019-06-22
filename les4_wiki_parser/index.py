@@ -5,7 +5,7 @@ from wiki_requests import get_topic_page
 def get_topic_words(topic):
     html_content = get_topic_page(topic)
     words = re.findall(r'[а-яА-Я][а-яА-Я\-\']+[а-яА-Я]', html_content)
-    return words
+    return [w.capitalize() for w in words]  # Добавил капитализацию, потому что Дерево и дерево считались разными
 
 
 def get_common_words(topic):
