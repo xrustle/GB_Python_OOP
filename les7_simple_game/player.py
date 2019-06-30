@@ -1,4 +1,4 @@
-import random
+from random import randint
 
 
 class Player:
@@ -7,7 +7,7 @@ class Player:
     position = [2, 0]
 
     def was_hit(self, hid):
-        self.health -= random.choice(range(hid + 1))
+        self.health -= randint(1, hid + 1)
 
     def wait(self):
         if not self.health == self.max_health:

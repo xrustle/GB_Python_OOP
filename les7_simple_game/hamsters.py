@@ -1,4 +1,4 @@
-from random import randint, choice
+from random import randint
 
 
 class Hamster:
@@ -7,7 +7,8 @@ class Hamster:
         self.health = randint(1, 4)
         self.position = self.get_clear_position(map)
 
-    def get_clear_position(self, map):
+    @staticmethod
+    def get_clear_position(map):
         map_height = len(map.split('\n'))
         map_width = len(map.split('\n')[0])
         while True:

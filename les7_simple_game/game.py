@@ -36,15 +36,15 @@ class Game:
             if self.player.position[1] == len(self.map.split('\n')) - 1:
                 return False
             self.player.position[1] += 1
-        if destination == 'w':
+        elif destination == 'w':
             if self.player.position[1] == 0:
                 return False
             self.player.position[1] -= 1
-        if destination == 'a':
+        elif destination == 'a':
             if self.player.position[0] == 0:
                 return False
             self.player.position[0] -= 1
-        if destination == 'd':
+        elif destination == 'd':
             if self.player.position[0] == len(self.map.split('\n')[0]) - 1:
                 return False
             self.player.position[0] += 1
@@ -52,6 +52,7 @@ class Game:
 
     def get_full_map(self):
         s = self.map
+        s = self.add_point(self.player.position, 'x', s)
         for h in self.hamsters:
             s = self.add_point(h.position, str(h.id), s)
         return s
@@ -64,7 +65,7 @@ class Game:
 
     def on_move(self, direction):
         hamster = self.get_hamster_on_position(self.player.position)
-        if not hamster == '*':
+        if hamster not in ('*', 'x'):
             self.player.was_hit(int(hamster))
             if self.player.health <= 0:
                 self.game_on = False
@@ -73,10 +74,11 @@ class Game:
             print('Player\'s health:', self.player.health)
             killed = self.hamsters[int(hamster) - 1].on_shot()
             if not killed:
-                print('wasnt killed')
+                print('Hamster wasn\'t killed')
                 self.move_player(self.directions[direction])
             else:
                 print(self.hamsters[int(hamster) - 1].id, 'was killed')
+
 
     def start(self):
         game.render_map()
@@ -96,6 +98,12 @@ class Game:
                 self.game_on = False
 
 
-if __name__ == '__main__':
-    game = Game()
-    game.start()
+game = Game()
+game.start()
+
+# 1. Попробуйте выйти за границы поля.
+#    За границы не выйти. Мы это на уроке исправляли в методе Game move_player
+# 2. У вас получается рождение под хомяком?
+#    Исправлено. В get_full_map теперь помимо хомяков добавляется и игрок
+# 3. Отличная концовка, не так ли?
+#
