@@ -3,7 +3,6 @@ from hamsters import Hamster
 
 hamsters_count = 4
 
-
 class Game:
     happy_message = 'You won!'
     map = '****\n****\n****\n****'
@@ -54,7 +53,8 @@ class Game:
         s = self.map
         s = self.add_point(self.player.position, 'x', s)
         for h in self.hamsters:
-            s = self.add_point(h.position, str(h.id), s)
+            if h.health > 0:
+                s = self.add_point(h.position, str(h.id), s)
         return s
 
     def get_hamster_on_position(self, coords):
@@ -67,24 +67,30 @@ class Game:
         hamster = self.get_hamster_on_position(self.player.position)
         if hamster not in ('*', 'x'):
             self.player.was_hit(int(hamster))
+
             if self.player.health <= 0:
                 self.game_on = False
                 print('Game over')
                 return False
+
             print('Player\'s health:', self.player.health)
             killed = self.hamsters[int(hamster) - 1].on_shot()
+
             if not killed:
                 print('Hamster wasn\'t killed')
                 self.move_player(self.directions[direction])
             else:
                 print(self.hamsters[int(hamster) - 1].id, 'was killed')
 
-
     def start(self):
         game.render_map()
         while self.game_on:
-            if len(self.hamsters) == 0:
+            for h in self.hamsters:
+                if h.health > 0:
+                    break
+            else:
                 print(self.happy_message)
+                self.game_on = False
                 return True
 
             command = input('Insert command: ')
@@ -102,8 +108,17 @@ game = Game()
 game.start()
 
 # 1. Попробуйте выйти за границы поля.
-#    За границы не выйти. Мы это на уроке исправляли в методе Game move_player
+#    Я код писал сам по видео урокам. И за границы мы не выходили.
+#    Мы это на исправляли в методе Game move_player на одном из видео.
+#    В любом случае такого бага сейчас нет
+#    34-51 строки
+
 # 2. У вас получается рождение под хомяком?
-#    Исправлено. В get_full_map теперь помимо хомяков добавляется и игрок
+#    Исправлено. В get_full_map теперь помимо хомяков добавляется и игрок.
+#    Чтобы хомяки не могли появиться на месте игрока
+#    55 строка
+
 # 3. Отличная концовка, не так ли?
-#
+#    Да, неплохая. Очень "интересная" игра)
+#    Исправил концовку. Если убиваем последнего хомяка, то программа завершается  тестом You won!
+#    93-95 строка в game.py
